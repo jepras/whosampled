@@ -2,19 +2,17 @@ from get_song_info import get_artist_name, get_sampled_songs
 from search import search_song
 from whosampled.utils.graph_utils import build_graph, plot_graph
 
-import plotly.graph_objects as go
-import networkx as nx
-
-
 def main():
-    # artist = get_artist_name(SONG_ID)
-    # print("Artist:", artist)
+    song_id = search_song("The World Is Yours", artist_name="Nas")
+    sampled_songs = get_sampled_songs(song_id)
 
-    # song_id = search_song("The World Is Yours", artist_name="Nas")
-    # print("Song ID:", song_id)
+    # Create nodes and edges
+    nodes = [song["title"] for song in sampled_songs]  # (or use song["artist"] if you prefer)
+    edges = [(sampled_songs[0]["title"], song["title"]) for song in sampled_songs[1:]]
 
-    nodes = ["The World Is Yours", "Sampled Song 1", "Sampled Song 2"]
-    edges = [("The World Is Yours", "Sampled Song 1"), ("The World Is Yours", "Sampled Song 2")]
+    original_song = "The World Is Yours"  # (or fetch it from your API)
+    nodes.insert(0, original_song)
+    edges = [(original_song, song["title"]) for song in sampled_songs]
 
     G = build_graph(nodes, edges)
     plot_graph(G)

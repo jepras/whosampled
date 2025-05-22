@@ -17,7 +17,6 @@ def search_song(song_title, artist_name=None):
             if artist_name.lower() in result["primary_artist"]["name"].lower():
                 print(f"Found: {result['full_title']} (ID: {result['id']})")
                 get_artist_name(result['id'])
-                get_sampled_songs(result['id'])
                 return result["id"]
         else:
             print(f"Found: {result['full_title']} (ID: {result['id']})")

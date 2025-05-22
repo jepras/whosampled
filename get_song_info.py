@@ -1,23 +1,13 @@
-from config import ACCESS_TOKEN
-import requests
-
-
+from whosampled.api.genius_client import call_genius_api
 
 def get_artist_name(song_id):
-    base_url = "https://api.genius.com"
-    headers = {"Authorization": f"Bearer {ACCESS_TOKEN}"}
-    response = requests.get(f"{base_url}/songs/{song_id}", headers=headers)
-    data = response.json()
-    # Extract artist name
+    data = call_genius_api("/songs/{song_id}", song_id=song_id)
     artist_name = data["response"]["song"]["artist_names"]
     print("Artist:", artist_name)
     return artist_name
 
 def get_sampled_songs(song_id):
-    base_url = "https://api.genius.com"
-    headers = {"Authorization": f"Bearer {ACCESS_TOKEN}"}
-    response = requests.get(f"{base_url}/songs/{song_id}", headers=headers)
-    data = response.json()
+    data = call_genius_api("/songs/{song_id}", song_id=song_id)
     relationships = data["response"]["song"].get("song_relationships", [])
     sampled_songs = []
     for rel in relationships:
