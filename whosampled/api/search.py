@@ -1,8 +1,8 @@
 import streamlit as st
-from config import ACCESS_TOKEN
+from whosampled.config import ACCESS_TOKEN
 import requests
 
-from get_song_info import get_artist_name, get_sampled_songs
+from whosampled.api.get_song_info import get_artist_name, get_sampled_songs
 
 def search_song(song_title, artist_name=None):
     base_url = "https://api.genius.com"

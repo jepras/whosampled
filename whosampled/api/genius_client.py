@@ -1,6 +1,6 @@
 # genius_client.py
 import requests
-from config import ACCESS_TOKEN
+from whosampled.config import ACCESS_TOKEN
 
 BASE_URL = "https://api.genius.com"
 HEADERS = {"Authorization": f"Bearer {ACCESS_TOKEN}"}

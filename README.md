@@ -74,19 +74,125 @@ This project allows users to search for songs using the Genius API and visualize
 
 ## Project Structure
 
+The project follows a modular architecture with clear separation of concerns. Here's a detailed overview:
+
 ```
-whosampled/
-├── app.py              # Streamlit web application entry point
-├── main.py             # (Optional) Command-line entry point
-├── requirements.txt    # Project dependencies
-├── config.py           # Configuration loading (e.g., API key)
-├── search.py           # Song search functionality
-├── get_song_info.py    # Function to get song details and samples
-├── .env                # Environment variables (API key)
-├── .gitignore          # Specifies intentionally untracked files
-└── whosampled/         # Python package directory
-    ├── api/
-    │   └── genius_client.py # Helper for API calls
-    └── utils/
-        └── graph_utils.py # Graph building and visualization utilities
-``` 
+whosampled/                      # Root project directory
+├── app.py                      # Streamlit app entry point
+│   └── Imports from: → components, services, state
+│
+├── main.py                     # Script entry point
+│   └── Imports from: → api, utils
+│
+├── requirements.txt            # Project dependencies
+│
+└── whosampled/                 # Main package directory
+    ├── __init__.py            # Package initialization (version, exports)
+    │
+    ├── config.py              # Configuration (ACCESS_TOKEN)
+    │   └── Used by: ← api/*
+    │
+    ├── api/                   # API-related code
+    │   ├── __init__.py
+    │   │
+    │   ├── genius_client.py   # Base API client
+    │   │   ├── Imports: → config
+    │   │   └── Used by: → get_song_info.py, search.py
+    │   │
+    │   ├── get_song_info.py   # Song info functions
+    │   │   ├── Imports: → genius_client
+    │   │   └── Used by: → search.py, main.py
+    │   │
+    │   └── search.py         # Search functionality
+    │       ├── Imports: → config, get_song_info
+    │       └── Used by: → services/search_service.py
+    │
+    ├── components/            # UI components
+    │   ├── __init__.py
+    │   │
+    │   └── search_components.py
+    │       └── Used by: → app.py
+    │
+    ├── services/             # Business logic
+    │   ├── __init__.py
+    │   │
+    │   └── search_service.py
+    │       ├── Imports: → api/search, state/app_state
+    │       └── Used by: → app.py
+    │
+    ├── state/               # State management
+    │   ├── __init__.py
+    │   │
+    │   └── app_state.py
+    │       └── Used by: → services/search_service.py
+    │
+    └── utils/              # Utility functions
+        ├── __init__.py
+        │
+        └── graph_utils.py
+            └── Used by: → main.py
+```
+
+### Key Components and Their Relationships
+
+1. **Entry Points**:
+   - `app.py` (Streamlit UI):
+     - Uses components for UI rendering
+     - Uses services for business logic
+     - Uses state for application state management
+   - `main.py` (Script):
+     - Uses API functions for data fetching
+     - Uses utils for graph visualization
+
+2. **API Layer**:
+   - `genius_client.py`: Base API client that handles all Genius API requests
+   - `get_song_info.py`: Functions for fetching song details and samples
+   - `search.py`: Search functionality using the Genius API
+
+3. **UI Layer**:
+   - `components/`: Contains all Streamlit UI components
+   - `search_components.py`: Handles the search interface and song selection
+
+4. **Business Logic**:
+   - `services/`: Contains business logic and application rules
+   - `search_service.py`: Manages search operations and state updates
+
+5. **State Management**:
+   - `state/`: Manages application state
+   - `app_state.py`: Handles song selection and search state
+
+### Data Flow
+
+1. **Search Flow**:
+   ```
+   User Search
+   ├── → search_components.py (UI input)
+   ├── → search_service.py (process request)
+   ├── → api/search.py (API call)
+   ├── → genius_client.py (HTTP request)
+   ├── → search_service.py (process response)
+   ├── → app_state.py (update state)
+   └── → search_components.py (update UI)
+   ```
+
+2. **Song Selection Flow**:
+   ```
+   User Selection
+   ├── → search_components.py (UI selection)
+   ├── → search_service.py (process selection)
+   ├── → app_state.py (update state)
+   └── → search_components.py (update UI)
+   ```
+
+### Design Principles
+
+- **Separation of Concerns**: Each module has a specific responsibility
+- **Dependency Flow**: Dependencies flow from top to bottom
+- **API Layer**: All external API calls go through `genius_client.py`
+- **State Management**: Centralized in `app_state.py`
+- **UI Components**: Isolated in `components/`
+- **Business Logic**: Contained in `services/`
+
+## Development
+
+// ... rest of existing content after the old project structure section ... 

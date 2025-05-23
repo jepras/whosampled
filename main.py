@@ -1,5 +1,5 @@
-from get_song_info import get_artist_name, get_sampled_songs
-from search import search_song
+from whosampled.api.get_song_info import get_artist_name, get_sampled_songs
+from whosampled.api.search import search_song
 from whosampled.utils.graph_utils import build_graph, plot_graph
 
 def main():
