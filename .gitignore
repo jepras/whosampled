@@ -1,3 +1,33 @@
+# Virtual Environment
 .venv/
+
+# Environment Variables
 .env
+
+# Documentation
 /genius_api_docs.md
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
