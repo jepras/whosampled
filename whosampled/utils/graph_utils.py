@@ -53,4 +53,4 @@ def plot_graph(G):
                         yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)
                     ))
 
-    fig.show()
+    return fig  # Return the figure instead of showing it
