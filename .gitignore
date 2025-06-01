@@ -3,6 +3,7 @@
 
 # Environment Variables
 .env
+.streamlit/secrets.toml
 
 # Documentation
 /genius_api_docs.md
