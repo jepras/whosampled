@@ -21,7 +21,6 @@ search_query = render_search_input()
 # Handle search and get results
 results = handle_search(search_query)
 
-
 # If we have results, render the song selector
 if results:
     selected_song_display, selected_id = render_song_selector(
@@ -35,24 +34,25 @@ if results:
 
         # Add a loading spinner while fetching and processing data
         with st.spinner("Loading sample data and generating graph..."):
-            sampled_songs = get_sampled_songs(selected_id)
+            song_data = get_sampled_songs(selected_id)
 
-            if sampled_songs:
+            if song_data:
                 # Generate and display the sample description
                 description = generate_sample_description(
-                    selected_song_display, sampled_songs
+                    selected_song_display, song_data["sampled_songs"]
                 )
                 st.write(description)
                 st.write("---")  # Add a separator
 
                 # Create nodes and edges for the graph
-                nodes = [song["title"] for song in sampled_songs]
+                nodes = [song["title"] for song in song_data["sampled_songs"]]
                 edges = [
-                    (selected_song_display, song["title"]) for song in sampled_songs
+                    (selected_song_display, song["title"])
+                    for song in song_data["sampled_songs"]
                 ]
 
                 # Build and plot the graph
-                G = build_graph(nodes, edges)
+                G = build_graph(song_data["main_song"], song_data["sampled_songs"])
                 fig = plot_graph(G)  # Get the figure object
                 st.plotly_chart(fig, use_container_width=True)  # Display in Streamlit
             else:
@@ -60,6 +60,3 @@ if results:
 else:
     if search_query:  # Only show "no results" if there was a search query
         st.write("No results found. Try a different search term.")
-
-# You can now use st.session_state['selected_song_id'] elsewhere in your app
-# For example, to fetch sampled songs or build the graph when a button is clicked.

@@ -79,18 +79,16 @@ The project follows a modular architecture with clear separation of concerns. He
 ```
 whosampled/                      # Root project directory
 ├── app.py                      # Streamlit app entry point
-│   └── Imports from: → components, services, state
-│
-├── main.py                     # Script entry point
-│   └── Imports from: → api, utils
+│   └── Imports from: → components, services, state, api, utils
 │
 ├── requirements.txt            # Project dependencies
+├── setup.py                    # Package installation
 │
 └── whosampled/                 # Main package directory
     ├── __init__.py            # Package initialization (version, exports)
     │
     ├── config.py              # Configuration (ACCESS_TOKEN)
-    │   └── Used by: ← api/*
+    │   └── Used by: ← api/genius_client.py
     │
     ├── api/                   # API-related code
     │   ├── __init__.py
@@ -101,10 +99,10 @@ whosampled/                      # Root project directory
     │   │
     │   ├── get_song_info.py   # Song info functions
     │   │   ├── Imports: → genius_client
-    │   │   └── Used by: → search.py, main.py
+    │   │   └── Used by: → app.py
     │   │
     │   └── search.py         # Search functionality
-    │       ├── Imports: → config, get_song_info
+    │       ├── Imports: → genius_client
     │       └── Used by: → services/search_service.py
     │
     ├── components/            # UI components
@@ -124,24 +122,23 @@ whosampled/                      # Root project directory
     │   ├── __init__.py
     │   │
     │   └── app_state.py
-    │       └── Used by: → services/search_service.py
+    │       └── Used by: → services/search_service.py, app.py
     │
     └── utils/              # Utility functions
         ├── __init__.py
         │
         └── graph_utils.py
-            └── Used by: → main.py
+            └── Used by: → app.py
 ```
 
 ### Key Components and Their Relationships
 
-1. **Entry Points**:
+1. **Entry Point**:
    - `app.py` (Streamlit UI):
      - Uses components for UI rendering
      - Uses services for business logic
      - Uses state for application state management
-   - `main.py` (Script):
-     - Uses API functions for data fetching
+     - Uses API for data fetching
      - Uses utils for graph visualization
 
 2. **API Layer**:
@@ -184,9 +181,19 @@ whosampled/                      # Root project directory
    └── → search_components.py (update UI)
    ```
 
+3. **Sample Visualization Flow**:
+   ```
+   Sample Display
+   ├── → app.py (trigger visualization)
+   ├── → get_song_info.py (fetch samples)
+   ├── → graph_utils.py (create visualization)
+   └── → app.py (display graph and details)
+   ```
+
 ### Design Principles
 
 - **Separation of Concerns**: Each module has a specific responsibility
+- **Single Entry Point**: All functionality is accessed through the Streamlit app
 - **Dependency Flow**: Dependencies flow from top to bottom
 - **API Layer**: All external API calls go through `genius_client.py`
 - **State Management**: Centralized in `app_state.py`
